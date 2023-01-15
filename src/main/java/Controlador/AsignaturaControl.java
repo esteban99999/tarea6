@@ -43,8 +43,12 @@ public class AsignaturaControl {
             } else {
                 
                 Asignatura asignatura = new Asignatura(codigo, nombre, libroGuia, numHoras, numUnidades,carrera);
-                this.asignaturaServiceImpl.crear(asignatura);
-                retorno = "Creado Satisfactoriamente ";
+                if (this.codigoActual(codigo)) {
+                                    throw new RuntimeException(" Codigo Existente ");
+                                } else {
+                                    this.asignaturaServiceImpl.crear(asignatura);
+                                    retorno = "Creado Satisfactoriamente ";
+                                }
             }
   }
         return retorno;
@@ -74,6 +78,7 @@ public class AsignaturaControl {
         int numUnidades = Integer.valueOf(data[3]).intValue();
         Carrera carrera = this.carreraServiceImpl.buscaCodigo(Integer.valueOf(data[4]));
         int codigo=Integer.valueOf(data[5]).intValue();
+        int modificar = Integer.valueOf(data[6]).intValue();
         if (numUnidades < 0) {
             retorno += " El numero de Unidades no son validos ";
         } else {
@@ -82,8 +87,13 @@ public class AsignaturaControl {
             } else {
                 
                 Asignatura asignatura = new Asignatura(codigo, nombre, libroGuia, numHoras, numUnidades,carrera);
-                this.asignaturaServiceImpl.crear(asignatura);
-                retorno = "Creado Satisfactoriamente ";
+                if (!this.codigoActual(modificar)) {
+                                    throw new RuntimeException(" Codigo No Existente ");
+
+                                } else {
+                                    this.asignaturaServiceImpl.modificar(asignatura, modificar);
+                                    retorno = "Modificado Satisfactoriamente ";
+                                }
             }
   }
         return retorno;
