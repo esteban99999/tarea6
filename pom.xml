@@ -11,7 +11,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <exec.mainClass>com.mycompany.tarea03_03.Tarea03_03</exec.mainClass>
     </properties>
-    <name>Tarea03_06</name>
+    <name>poo-unidad03-ooms</name>
     <dependencies>
         <dependency>
             <groupId>ups.edu.ec.poo.unidad03.ooms</groupId>
