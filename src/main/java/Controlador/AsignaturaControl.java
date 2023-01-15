@@ -24,7 +24,7 @@ public class AsignaturaControl {
   this.asignaturaServiceImpl = new AsignaturaServiceImpl(); 
   }
   public String crear(String[] data) {
-      
+      try {
         String retorno = "No se puede crear la Asignatura:";
         String nombre = data[0];
         String libroGuia = data[1];
@@ -32,6 +32,9 @@ public class AsignaturaControl {
         int numUnidades = Integer.valueOf(data[3]).intValue();
         Carrera carrera = this.carreraServiceImpl.buscaCodigo(Integer.valueOf(data[4]));
         int codigo=Integer.valueOf(data[5]).intValue();
+        if( carrera== null){
+        throw new NumberFormatException(" No existe carrera "); 
+        }
         if (numUnidades < 0) {
             retorno += " El numero de Unidades no son validos ";
         } else {
@@ -45,11 +48,25 @@ public class AsignaturaControl {
             }
   }
         return retorno;
-  
+  } catch (NumberFormatException e1) {
+            throw new RuntimeException("Error en los parametros");
+        } catch (RuntimeException e1) {
+            throw new RuntimeException("Codigo Existente");
+        }
 }
-  
+  public boolean codigoActual(int codigo) {
+        boolean retorno = false;
+        for (Asignatura asignatura : this.asignaturaServiceImpl.listar()) {
+            if (asignatura.getCodigo() == codigo) {
+                retorno = true;
+
+            }
+        }
+
+        return retorno;
+    }
   public String modificar(String[] data) {
-      
+      try {
         String retorno = "No se puede crear la Asignatura:";
         String nombre = data[0];
         String libroGuia = data[1];
@@ -70,7 +87,11 @@ public class AsignaturaControl {
             }
   }
         return retorno;
-  
+  } catch (NumberFormatException e1) {
+            throw new RuntimeException("Error en los parametros");
+        } catch (RuntimeException e1) {
+            throw new RuntimeException("Codigo No Existente");
+        }
 }
   
   public List<Asignatura> listar() {
@@ -78,7 +99,17 @@ public class AsignaturaControl {
   }
   public void eliminar(String codigos) {
         int codigo = Integer.valueOf(codigos).intValue();
-        this.asignaturaServiceImpl.eliminar(codigo);
+        try {
+            if (!this.codigoActual(codigo)) {
+                throw new RuntimeException(" Codigo No Existente ");
+
+            } else {
+
+                this.asignaturaServiceImpl.eliminar(codigo);
+            }
+        } catch (NumberFormatException e1) {
+            throw new RuntimeException("Codigo no valido");
+        }
 
     }
 }
